@@ -9,8 +9,14 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = [
         {"role": "system", "content": st.secrets.AppSettings.chatbot_setting}
         ]
+
+if "messages_len" not in st.session_state:
     st.session_state["messages_len"] = 0
+
+if "total_tokens" not in st.session_state:
     st.session_state["total_tokens"] = 0
+
+if "all_tokens" not in st.session_state:
     st.session_state["all_tokens"] = 0
 
 # チャットボットとやりとりする関数
