@@ -3,11 +3,13 @@ import openai
 
 # Streamlit Community Cloudの「Secrets」からOpenAI API keyを取得
 openai.api_key = st.secrets.OpenAIAPI.openai_api_key
+role_system = st.secrets.ChatSettings.role_system
+message_max = st.secrets.ChatSettings.message_max
 
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "system", "content": st.secrets.AppSettings.chatbot_setting}
+        {"role": "system", "content": role_system}
         ]
 if "messages_len" not in st.session_state:
     st.session_state["messages_len"] = 0
@@ -31,7 +33,7 @@ def communicate():
     bot_message = response["choices"][0]["message"]
     messages.append(bot_message)
 
-    if len(messages) >= 9:
+    if len(messages) >= message_max:
         del messages[1:3] # 最も古いやり取り(質問+応答)を削除
 
     st.session_state["messages_len"] = len(messages)
