@@ -1,7 +1,7 @@
 import streamlit as st
 import openai
 
-# Streamlit Community Cloudの「Secrets」からOpenAI API keyを取得
+# Streamlit Cloudの「Secrets」からOpenAI API keyを取得
 openai.api_key = st.secrets.OpenAIAPI.openai_api_key
 role_system = st.secrets.ChatSettings.role_system
 message_max = st.secrets.ChatSettings.message_max
@@ -36,7 +36,7 @@ def communicate():
     all_messages.append(assistant_message)
 
     if len(all_messages) >= message_max:
-        del all_messages[1:3] # 最も古いやり取り(質問+応答)を削除
+        del all_messages[1:3] # 最も古いやり取り(質問+応答)を削除(先頭はrole:systemなので削除せず)
 
     st.session_state["messages_len"] = len(all_messages)
     st.session_state["total_tokens"] = response["usage"]["total_tokens"]
@@ -44,7 +44,7 @@ def communicate():
     st.session_state["user_input"] = ""  # 入力欄を消去
 
 
-# 現在のやりとりに対するコストを表示する
+# 現在のやりとりに対するコスト表示
 def display_tokens():
     len = str(st.session_state["messages_len"])
     total = str(st.session_state["total_tokens"])
