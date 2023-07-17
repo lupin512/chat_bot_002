@@ -17,9 +17,9 @@ def communicate():
     user_message = {"role": "user", "content": st.session_state["user_input"]}
     messages.append(user_message)
 
-    #print("messageの数は")
-    #print(len(messages))
-    #print("です")
+    print("messageの数は")
+    print(len(messages))
+    print("です")
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -28,6 +28,10 @@ def communicate():
 
     bot_message = response["choices"][0]["message"]
     messages.append(bot_message)
+
+    print(response["usage"]["prompt_tokens"])
+    print(response["usage"]["completion_tokens"])
+    print(response["usage"]["total_tokens"])
 
     st.session_state["user_input"] = ""  # 入力欄を消去
 
