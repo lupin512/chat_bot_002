@@ -39,14 +39,18 @@ def communicate():
     st.session_state["all_tokens"] += response["usage"]["total_tokens"]
     st.session_state["user_input"] = ""  # 入力欄を消去
 
+# 現在のやりとりに対するコストを表示する
+def display_tokens():
+    len = str(st.session_state["messages_len"])
+    total = str(st.session_state["total_tokens"])
+    all = str(st.session_state["all_tokens"])
+    st.write("messeage数 {len}, 今回消費 {total}, 累計消費 {all}です")
+
 
 # ユーザーインターフェイスの構築
 st.title("My AI Assistant")
 st.write("ChatGPT APIを使ったチャットボットです。")
-
-st.write("現在のmesseage数は" + str(st.session_state["messages_len"]) + "です")
-st.write("今回消費したtokenは" + str(st.session_state["total_tokens"]) + "です")
-st.write("累計での消費tokenは" + str(st.session_state["all_tokens"]) + "です")
+display_tokens()
 
 user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
 
