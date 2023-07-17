@@ -9,13 +9,10 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = [
         {"role": "system", "content": st.secrets.AppSettings.chatbot_setting}
         ]
-
 if "messages_len" not in st.session_state:
     st.session_state["messages_len"] = 0
-
 if "total_tokens" not in st.session_state:
     st.session_state["total_tokens"] = 0
-
 if "all_tokens" not in st.session_state:
     st.session_state["all_tokens"] = 0
 
@@ -33,6 +30,9 @@ def communicate():
 
     bot_message = response["choices"][0]["message"]
     messages.append(bot_message)
+
+    if len(messages) >= 9:
+        del messages[1:3] # 最も古いやり取り(質問+応答)を削除
 
     st.session_state["messages_len"] = len(messages)
     st.session_state["total_tokens"] = response["usage"]["total_tokens"]
