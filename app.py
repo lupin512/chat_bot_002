@@ -44,7 +44,7 @@ def display_tokens():
     len = str(st.session_state["messages_len"])
     total = str(st.session_state["total_tokens"])
     all = str(st.session_state["all_tokens"])
-    st.write("messeage数 {len}, 今回消費 {total}, 累計消費 {all}です")
+    st.write("messeage数 "+len+", 今回消費token "+total+", 累計消費token "+all+"です")
 
 
 # ユーザーインターフェイスの構築
