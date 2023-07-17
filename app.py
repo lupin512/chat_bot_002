@@ -9,6 +9,9 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = [
         {"role": "system", "content": st.secrets.AppSettings.chatbot_setting}
         ]
+    st.session_state["messages_len"] = 0
+    st.session_state["total_tokens"] = 0
+    st.session_state["all_tokens"] = 0
 
 # チャットボットとやりとりする関数
 def communicate():
@@ -16,10 +19,6 @@ def communicate():
 
     user_message = {"role": "user", "content": st.session_state["user_input"]}
     messages.append(user_message)
-
-    print("messageの数は")
-    print(len(messages))
-    print("です")
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -29,16 +28,19 @@ def communicate():
     bot_message = response["choices"][0]["message"]
     messages.append(bot_message)
 
-    print(response["usage"]["prompt_tokens"])
-    print(response["usage"]["completion_tokens"])
-    print(response["usage"]["total_tokens"])
-
+    st.session_state["messages_len"] = len(messages)
+    st.session_state["total_tokens"] = response["usage"]["total_tokens"]
+    st.session_state["all_tokens"] += response["usage"]["total_tokens"]
     st.session_state["user_input"] = ""  # 入力欄を消去
 
 
 # ユーザーインターフェイスの構築
 st.title("My AI Assistant")
 st.write("ChatGPT APIを使ったチャットボットです。")
+
+st.write("現在のmesseage数は" + str(st.session_state["messages_len"]) + "です")
+st.write("今回消費したtokenは" + str(st.session_state["total_tokens"]) + "です")
+st.write("累計での消費tokenは" + str(st.session_state["all_tokens"]) + "です")
 
 user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
 
